@@ -20,20 +20,20 @@ update: build push
 build: ## Build ansible-playbook image
 	docker build -f $(THISDIR_PATH)/Dockerfile -t $(IMAGE_NAME):$(VERSION) $(PROJECT_PATH)
 
-run: build ## Run ansible-playbook
+run: build ## Run ansible-playbook image
 	docker run --rm -it \
 	-v $(PROJECT_PATH):/ansible/playbooks \
 	$(IMAGE_NAME):$(VERSION) \
 	$(ANSIBLE_PLAYBOOK_EXECUTION)
 
-run-vault: build ## Run ansible-vault
+run-vault: build ## Run ansible-vault with ansible-playbook image
 	docker run --rm -it \
 	-v $(PROJECT_PATH):/ansible/playbooks \
 	--entrypoint ansible-vault \
 	$(IMAGE_NAME):$(VERSION) \
         $(ANSIBLE_VAULT_EXECUTION)
 
-tag-latest: ## Tag image as latest
+tag-latest: ## Tag ansible-playbook image as latest
 	docker tag $(IMAGE_NAME):$(VERSION) $(NAMESPACE)/$(NAME):latest
 
 push: tag-latest ## Push ansible-playbook image
