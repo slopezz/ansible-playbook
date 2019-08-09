@@ -1,7 +1,8 @@
 FROM alpine:3.9
  
-ENV ANSIBLE_VERSION 2.7.6
+ENV ANSIBLE_VERSION 2.7.7
 
+ENV ANSIBLE_LOCAL_TEMP /tmp
 ENV ANSIBLE_HOST_KEY_CHECKING false
 ENV ANSIBLE_RETRY_FILES_ENABLED false
 ENV PYTHONPATH /ansible/lib
@@ -31,7 +32,7 @@ RUN set -ex && \
     apk update && apk upgrade && \
     apk add --no-cache ${BUILD_PACKAGES} && \
     pip install --upgrade pip && \
-    pip install PyYAML openshift ansible==${ANSIBLE_VERSION} && \
+    pip install pycrypto PyYAML openshift ansible==${ANSIBLE_VERSION} && \
     apk del build-dependencies && \
     rm -rf /var/cache/apk/*
 
