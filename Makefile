@@ -4,7 +4,7 @@
 
 NAME       = ansible-playbook
 NAMESPACE  = slopezz
-VERSION    = 2.7.6
+VERSION    = 2.7.7
 
 ANSIBLE_PLAYBOOK_EXECUTION ?= --version
 ANSIBLE_VAULT_EXECUTION    ?= --version
@@ -22,13 +22,13 @@ build: ## Build ansible-playbook image
 
 run: build ## Run ansible-playbook image
 	docker run --rm -it \
-	-v $(PROJECT_PATH):/ansible/playbooks \
+	-u $$(id -u):$$(id -g) -v /etc/passwd:/etc/passwd -v ~/:/home/$$(id -u -n) -v $(PROJECT_PATH):/ansible/playbooks \
 	$(IMAGE_NAME):$(VERSION) \
 	$(ANSIBLE_PLAYBOOK_EXECUTION)
 
 run-vault: build ## Run ansible-vault with ansible-playbook image
 	docker run --rm -it \
-	-v $(PROJECT_PATH):/ansible/playbooks \
+	-u $$(id -u):$$(id -g) -v /etc/passwd:/etc/passwd -v ~/:/home/$$(id -u -n) -v $(PROJECT_PATH):/ansible/playbooks \
 	--entrypoint ansible-vault \
 	$(IMAGE_NAME):$(VERSION) \
         $(ANSIBLE_VAULT_EXECUTION)
